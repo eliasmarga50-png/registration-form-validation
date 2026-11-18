@@ -104,13 +104,17 @@ registrationForm.addEventListener("submit", function(event) {
     const isLastNameValid = validateLastName();
     const isUsernameValid = validateUsername();
     const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
+    const isConfirmPasswordValid = validateConfirmPassword();
 
     if (
         isFirstNameValid &&
         isLastNameValid &&
         isUsernameValid &&
-        isEmailValid
+        isEmailValid &&
+        isPasswordValid &&
+        isConfirmPasswordValid
     ) {
-        alert("First Name, Last Name, Username and Email are valid!");
+        alert("All registration fields are valid!");
     }
 });
