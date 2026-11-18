@@ -4,64 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registration Form</title>
+    <title>Create Account | Registration Form</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js" defer></script>
 </head>
 <body>
-
-    <div class="container">
-        <form id="registrationForm">
-            <h1>Create Account</h1>
-            <p>Fill in the information below to register.</p>
-
-            <div class="form-group">
-                <label for="firstName">First Name</label>
-                <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
-                <span class="error" id="firstNameError"></span>
+    <main class="container">
+        <section class="form-card">
+            <div class="form-header">
+                <div class="logo">RF</div>
+                <h1>Create Account</h1>
+                <p>Enter your details to create your account.</p>
             </div>
 
-            <div class="form-group">
-                <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
-                <span class="error" id="lastNameError"></span>
-            </div>
+            <form id="registrationForm" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" placeholder="Enter first name">
+                        <span class="error" id="firstNameError"></span>
+                    </div>
 
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Choose a username">
-                <span class="error" id="usernameError"></span>
-            </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" placeholder="Enter last name">
+                        <span class="error" id="lastNameError"></span>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email">
-                <span class="error" id="emailError"></span>
-            </div>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Choose a username">
+                    <span class="error" id="usernameError"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Create a password">
-                <span class="error" id="passwordError"></span>
-            </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="example@email.com">
+                    <span class="error" id="emailError"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
-                <span class="error" id="confirmPasswordError"></span>
-            </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Create a password">
+                        <button type="button" class="toggle-password" data-target="password" aria-label="Show password">Show</button>
+                    </div>
+                    <span class="error" id="passwordError"></span>
+                </div>
 
-            <div class="form-group">
-                <label for="profileImage">Upload Profile Image</label>
-                <input type="file" id="profileImage" name="profileImage" accept=".png,.jpeg,.jpg">
-                <span class="error" id="profileImageError"></span>
-            </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                        <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Show confirm password">Show</button>
+                    </div>
+                    <span class="error" id="confirmPasswordError"></span>
+                </div>
 
-            <button type="submit">Create Account</button>
+                <div class="form-group">
+                    <label for="profileImage">Profile Image</label>
+                    <input type="file" id="profileImage" accept=".png,.jpeg,.jpg">
+                    <span class="error" id="profileImageError"></span>
 
-            <div id="formMessage"></div>
-        </form>
-    </div>
+                    <div class="image-preview-container" id="imagePreviewContainer" hidden>
+                        <img id="imagePreview" alt="Selected profile image preview">
+                        <span>Image preview</span>
+                    </div>
+                </div>
 
-    <script src="js/script.js"></script>
+                <button type="submit" class="submit-btn">Create Account</button>
+
+                <div id="formMessage" role="status" aria-live="polite"></div>
+            </form>
+        </section>
+    </main>
 </body>
 </html>
