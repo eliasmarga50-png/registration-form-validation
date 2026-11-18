@@ -16,28 +16,34 @@ const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 const confirmPasswordError = document.getElementById("confirmPasswordError");
 const profileImageError = document.getElementById("profileImageError");
+
 const formMessage = document.getElementById("formMessage");
+const imagePreview = document.getElementById("imagePreview");
+const imagePreviewContainer = document.getElementById("imagePreviewContainer");
+
+function clearFormMessage() {
+    formMessage.textContent = "";
+    formMessage.className = "";
+}
 
 function validateFirstName() {
     try {
-        const firstNameValue = firstName.value.trim();
-        const namePattern = /^[A-Za-z]+$/;
+        const value = firstName.value.trim();
 
-        if (firstNameValue === "") {
+        if (value === "") {
             throw new Error("First name is required.");
         }
 
-        if (firstNameValue.length < 3 || firstNameValue.length > 14) {
-            throw new Error("First name must be between 3 and 14 characters.");
+        if (!/^[A-Za-z]+$/.test(value)) {
+            throw new Error("Use letters only.");
         }
 
-        if (!namePattern.test(firstNameValue)) {
-            throw new Error("First name must contain only letters.");
+        if (value.length < 3 || value.length > 14) {
+            throw new Error("First name must be 3–14 characters.");
         }
 
         firstNameError.textContent = "";
         return true;
-
     } catch (error) {
         firstNameError.textContent = error.message;
         return false;
@@ -46,24 +52,22 @@ function validateFirstName() {
 
 function validateLastName() {
     try {
-        const lastNameValue = lastName.value.trim();
-        const namePattern = /^[A-Za-z]+$/;
+        const value = lastName.value.trim();
 
-        if (lastNameValue === "") {
+        if (value === "") {
             throw new Error("Last name is required.");
         }
 
-        if (lastNameValue.length < 3 || lastNameValue.length > 14) {
-            throw new Error("Last name must be between 3 and 14 characters.");
+        if (!/^[A-Za-z]+$/.test(value)) {
+            throw new Error("Use letters only.");
         }
 
-        if (!namePattern.test(lastNameValue)) {
-            throw new Error("Last name must contain only letters.");
+        if (value.length < 3 || value.length > 14) {
+            throw new Error("Last name must be 3–14 characters.");
         }
 
         lastNameError.textContent = "";
         return true;
-
     } catch (error) {
         lastNameError.textContent = error.message;
         return false;
@@ -72,19 +76,18 @@ function validateLastName() {
 
 function validateUsername() {
     try {
-        const usernameValue = username.value.trim();
+        const value = username.value.trim();
 
-        if (usernameValue === "") {
+        if (value === "") {
             throw new Error("Username is required.");
         }
 
-        if (usernameValue.length < 6) {
-            throw new Error("Username must contain at least 6 characters.");
+        if (value.length < 6) {
+            throw new Error("Username must be at least 6 characters.");
         }
 
         usernameError.textContent = "";
         return true;
-
     } catch (error) {
         usernameError.textContent = error.message;
         return false;
@@ -93,20 +96,19 @@ function validateUsername() {
 
 function validateEmail() {
     try {
-        const emailValue = email.value.trim();
+        const value = email.value.trim();
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        if (emailValue === "") {
+        if (value === "") {
             throw new Error("Email address is required.");
         }
 
-        if (!emailPattern.test(emailValue)) {
-            throw new Error("Please enter a valid email address.");
+        if (!emailPattern.test(value)) {
+            throw new Error("Enter a valid email address.");
         }
 
         emailError.textContent = "";
         return true;
-
     } catch (error) {
         emailError.textContent = error.message;
         return false;
@@ -115,19 +117,18 @@ function validateEmail() {
 
 function validatePassword() {
     try {
-        const passwordValue = password.value;
+        const value = password.value;
 
-        if (passwordValue === "") {
+        if (value === "") {
             throw new Error("Password is required.");
         }
 
-        if (passwordValue.length < 8 || passwordValue.length > 128) {
-            throw new Error("Password must be between 8 and 128 characters.");
+        if (value.length < 8 || value.length > 128) {
+            throw new Error("Password must be 8–128 characters.");
         }
 
         passwordError.textContent = "";
         return true;
-
     } catch (error) {
         passwordError.textContent = error.message;
         return false;
@@ -136,19 +137,18 @@ function validatePassword() {
 
 function validateConfirmPassword() {
     try {
-        const confirmPasswordValue = confirmPassword.value;
+        const value = confirmPassword.value;
 
-        if (confirmPasswordValue === "") {
+        if (value === "") {
             throw new Error("Please confirm your password.");
         }
 
-        if (confirmPasswordValue !== password.value) {
+        if (value !== password.value) {
             throw new Error("Passwords do not match.");
         }
 
         confirmPasswordError.textContent = "";
         return true;
-
     } catch (error) {
         confirmPasswordError.textContent = error.message;
         return false;
@@ -160,7 +160,7 @@ function validateProfileImage() {
         const files = profileImage.files;
 
         if (files.length === 0) {
-            throw new Error("Please upload a profile image.");
+            throw new Error("Please select a profile image.");
         }
 
         if (files.length > 1) {
@@ -168,55 +168,57 @@ function validateProfileImage() {
         }
 
         const file = files[0];
+        const extension = file.name.split(".").pop().toLowerCase();
         const allowedExtensions = ["png", "jpg", "jpeg"];
         const allowedTypes = ["image/png", "image/jpeg"];
 
-        const fileName = file.name.toLowerCase();
-        const fileExtension = fileName.split(".").pop();
-
-        if (!allowedExtensions.includes(fileExtension)) {
-            throw new Error("Only PNG, JPG and JPEG files are allowed.");
-        }
-
-        if (!allowedTypes.includes(file.type)) {
-            throw new Error("Invalid image file type.");
+        if (!allowedExtensions.includes(extension) || !allowedTypes.includes(file.type)) {
+            throw new Error("Only PNG, JPG, and JPEG images are allowed.");
         }
 
         profileImageError.textContent = "";
         return true;
-
     } catch (error) {
         profileImageError.textContent = error.message;
+        imagePreviewContainer.hidden = true;
+        imagePreview.removeAttribute("src");
         return false;
     }
 }
 
-function clearFormMessage() {
-    formMessage.textContent = "";
-    formMessage.className = "";
+function showImagePreview() {
+    if (!validateProfileImage()) {
+        return;
+    }
+
+    const file = profileImage.files[0];
+    const imageURL = URL.createObjectURL(file);
+
+    imagePreview.src = imageURL;
+    imagePreviewContainer.hidden = false;
 }
 
-firstName.addEventListener("input", function() {
+firstName.addEventListener("input", () => {
     validateFirstName();
     clearFormMessage();
 });
 
-lastName.addEventListener("input", function() {
+lastName.addEventListener("input", () => {
     validateLastName();
     clearFormMessage();
 });
 
-username.addEventListener("input", function() {
+username.addEventListener("input", () => {
     validateUsername();
     clearFormMessage();
 });
 
-email.addEventListener("input", function() {
+email.addEventListener("input", () => {
     validateEmail();
     clearFormMessage();
 });
 
-password.addEventListener("input", function() {
+password.addEventListener("input", () => {
     validatePassword();
 
     if (confirmPassword.value !== "") {
@@ -226,18 +228,35 @@ password.addEventListener("input", function() {
     clearFormMessage();
 });
 
-confirmPassword.addEventListener("input", function() {
+confirmPassword.addEventListener("input", () => {
     validateConfirmPassword();
     clearFormMessage();
 });
 
-profileImage.addEventListener("change", function() {
-    validateProfileImage();
+profileImage.addEventListener("change", () => {
+    showImagePreview();
     clearFormMessage();
 });
 
-registrationForm.addEventListener("submit", function(event) {
+document.querySelectorAll(".toggle-password").forEach((button) => {
+    button.addEventListener("click", () => {
+        const target = document.getElementById(button.dataset.target);
+
+        if (target.type === "password") {
+            target.type = "text";
+            button.textContent = "Hide";
+            button.setAttribute("aria-label", "Hide password");
+        } else {
+            target.type = "password";
+            button.textContent = "Show";
+            button.setAttribute("aria-label", "Show password");
+        }
+    });
+});
+
+registrationForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    clearFormMessage();
 
     try {
         const isFirstNameValid = validateFirstName();
@@ -248,23 +267,31 @@ registrationForm.addEventListener("submit", function(event) {
         const isConfirmPasswordValid = validateConfirmPassword();
         const isProfileImageValid = validateProfileImage();
 
-        if (
-            !isFirstNameValid ||
-            !isLastNameValid ||
-            !isUsernameValid ||
-            !isEmailValid ||
-            !isPasswordValid ||
-            !isConfirmPasswordValid ||
-            !isProfileImageValid
-        ) {
-            throw new Error("Please correct all errors before submitting.");
-        }
+        const isFormValid =
+            isFirstNameValid &&
+            isLastNameValid &&
+            isUsernameValid &&
+            isEmailValid &&
+            isPasswordValid &&
+            isConfirmPasswordValid &&
+            isProfileImageValid;
 
-        formMessage.textContent = "Registration completed successfully!";
-        formMessage.className = "success-message";
+        if (!isFormValid) {
+            throw new Error("Please correct the errors above and try again.");
+        }
 
         registrationForm.reset();
 
+        imagePreviewContainer.hidden = true;
+        imagePreview.removeAttribute("src");
+
+        document.querySelectorAll(".toggle-password").forEach((button) => {
+            button.textContent = "Show";
+            button.setAttribute("aria-label", "Show password");
+        });
+
+        formMessage.textContent = "All fields are valid! Your form is ready for registration.";
+        formMessage.className = "success-message";
     } catch (error) {
         formMessage.textContent = error.message;
         formMessage.className = "error-message";
