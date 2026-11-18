@@ -3,9 +3,13 @@ const registrationForm = document.getElementById("registrationForm");
 
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
+const username = document.getElementById("username");
+const email = document.getElementById("email");
 
 const firstNameError = document.getElementById("firstNameError");
 const lastNameError = document.getElementById("lastNameError");
+const usernameError = document.getElementById("usernameError");
+const emailError = document.getElementById("emailError");
 
 function validateFirstName() {
     const firstNameValue = firstName.value.trim();
@@ -53,16 +57,60 @@ function validateLastName() {
     return true;
 }
 
+function validateUsername() {
+    const usernameValue = username.value.trim();
+
+    if (usernameValue === "") {
+        usernameError.textContent = "Username is required.";
+        return false;
+    }
+
+    if (usernameValue.length < 6) {
+        usernameError.textContent = "Username must contain at least 6 characters.";
+        return false;
+    }
+
+    usernameError.textContent = "";
+    return true;
+}
+
+function validateEmail() {
+    const emailValue = email.value.trim();
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (emailValue === "") {
+        emailError.textContent = "Email address is required.";
+        return false;
+    }
+
+    if (!emailPattern.test(emailValue)) {
+        emailError.textContent = "Please enter a valid email address.";
+        return false;
+    }
+
+    emailError.textContent = "";
+    return true;
+}
+
 firstName.addEventListener("input", validateFirstName);
 lastName.addEventListener("input", validateLastName);
+username.addEventListener("input", validateUsername);
+email.addEventListener("input", validateEmail);
 
 registrationForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const isFirstNameValid = validateFirstName();
     const isLastNameValid = validateLastName();
+    const isUsernameValid = validateUsername();
+    const isEmailValid = validateEmail();
 
-    if (isFirstNameValid && isLastNameValid) {
-        alert("First Name and Last Name are valid!");
+    if (
+        isFirstNameValid &&
+        isLastNameValid &&
+        isUsernameValid &&
+        isEmailValid
+    ) {
+        alert("First Name, Last Name, Username and Email are valid!");
     }
 });
