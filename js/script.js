@@ -5,11 +5,17 @@ const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const username = document.getElementById("username");
 const email = document.getElementById("email");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirmPassword");
+const profileImage = document.getElementById("profileImage");
 
 const firstNameError = document.getElementById("firstNameError");
 const lastNameError = document.getElementById("lastNameError");
 const usernameError = document.getElementById("usernameError");
 const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+const confirmPasswordError = document.getElementById("confirmPasswordError");
+const profileImageError = document.getElementById("profileImageError");
 
 function validateFirstName() {
     const firstNameValue = firstName.value.trim();
@@ -92,10 +98,89 @@ function validateEmail() {
     return true;
 }
 
+function validatePassword() {
+    const passwordValue = password.value;
+
+    if (passwordValue === "") {
+        passwordError.textContent = "Password is required.";
+        return false;
+    }
+
+    if (passwordValue.length < 8 || passwordValue.length > 128) {
+        passwordError.textContent = "Password must be between 8 and 128 characters.";
+        return false;
+    }
+
+    passwordError.textContent = "";
+    return true;
+}
+
+function validateConfirmPassword() {
+    const confirmPasswordValue = confirmPassword.value;
+
+    if (confirmPasswordValue === "") {
+        confirmPasswordError.textContent = "Please confirm your password.";
+        return false;
+    }
+
+    if (confirmPasswordValue !== password.value) {
+        confirmPasswordError.textContent = "Passwords do not match.";
+        return false;
+    }
+
+    confirmPasswordError.textContent = "";
+    return true;
+}
+
+function validateProfileImage() {
+    const files = profileImage.files;
+
+    if (files.length === 0) {
+        profileImageError.textContent = "Please upload a profile image.";
+        return false;
+    }
+
+    if (files.length > 1) {
+        profileImageError.textContent = "Only one image is allowed.";
+        return false;
+    }
+
+    const file = files[0];
+    const allowedExtensions = ["png", "jpg", "jpeg"];
+    const allowedTypes = ["image/png", "image/jpeg"];
+
+    const fileName = file.name.toLowerCase();
+    const fileExtension = fileName.split(".").pop();
+
+    if (!allowedExtensions.includes(fileExtension)) {
+        profileImageError.textContent = "Only PNG, JPG and JPEG files are allowed.";
+        return false;
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+        profileImageError.textContent = "Invalid image file type.";
+        return false;
+    }
+
+    profileImageError.textContent = "";
+    return true;
+}
+
 firstName.addEventListener("input", validateFirstName);
 lastName.addEventListener("input", validateLastName);
 username.addEventListener("input", validateUsername);
 email.addEventListener("input", validateEmail);
+
+password.addEventListener("input", function() {
+    validatePassword();
+
+    if (confirmPassword.value !== "") {
+        validateConfirmPassword();
+    }
+});
+
+confirmPassword.addEventListener("input", validateConfirmPassword);
+profileImage.addEventListener("change", validateProfileImage);
 
 registrationForm.addEventListener("submit", function(event) {
     event.preventDefault();
@@ -106,6 +191,7 @@ registrationForm.addEventListener("submit", function(event) {
     const isEmailValid = validateEmail();
     const isPasswordValid = validatePassword();
     const isConfirmPasswordValid = validateConfirmPassword();
+    const isProfileImageValid = validateProfileImage();
 
     if (
         isFirstNameValid &&
@@ -113,7 +199,8 @@ registrationForm.addEventListener("submit", function(event) {
         isUsernameValid &&
         isEmailValid &&
         isPasswordValid &&
-        isConfirmPasswordValid
+        isConfirmPasswordValid &&
+        isProfileImageValid
     ) {
         alert("All registration fields are valid!");
     }
