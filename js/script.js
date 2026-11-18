@@ -191,10 +191,30 @@ function validateProfileImage() {
     }
 }
 
-firstName.addEventListener("input", validateFirstName);
-lastName.addEventListener("input", validateLastName);
-username.addEventListener("input", validateUsername);
-email.addEventListener("input", validateEmail);
+function clearFormMessage() {
+    formMessage.textContent = "";
+    formMessage.className = "";
+}
+
+firstName.addEventListener("input", function() {
+    validateFirstName();
+    clearFormMessage();
+});
+
+lastName.addEventListener("input", function() {
+    validateLastName();
+    clearFormMessage();
+});
+
+username.addEventListener("input", function() {
+    validateUsername();
+    clearFormMessage();
+});
+
+email.addEventListener("input", function() {
+    validateEmail();
+    clearFormMessage();
+});
 
 password.addEventListener("input", function() {
     validatePassword();
@@ -202,10 +222,19 @@ password.addEventListener("input", function() {
     if (confirmPassword.value !== "") {
         validateConfirmPassword();
     }
+
+    clearFormMessage();
 });
 
-confirmPassword.addEventListener("input", validateConfirmPassword);
-profileImage.addEventListener("change", validateProfileImage);
+confirmPassword.addEventListener("input", function() {
+    validateConfirmPassword();
+    clearFormMessage();
+});
+
+profileImage.addEventListener("change", function() {
+    validateProfileImage();
+    clearFormMessage();
+});
 
 registrationForm.addEventListener("submit", function(event) {
     event.preventDefault();
@@ -228,14 +257,16 @@ registrationForm.addEventListener("submit", function(event) {
             !isConfirmPasswordValid ||
             !isProfileImageValid
         ) {
-            throw new Error("Please correct the errors in the form.");
+            throw new Error("Please correct all errors before submitting.");
         }
 
-        formMessage.textContent = "All registration fields are valid!";
-        formMessage.style.color = "green";
+        formMessage.textContent = "Registration completed successfully!";
+        formMessage.className = "success-message";
+
+        registrationForm.reset();
 
     } catch (error) {
         formMessage.textContent = error.message;
-        formMessage.style.color = "red";
+        formMessage.className = "error-message";
     }
 });
