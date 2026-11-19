@@ -84,8 +84,8 @@ function validateUsername() {
             throw new Error("Username is required.");
         }
 
-        if (value.length < 6) {
-            throw new Error("Username must be at least 6 characters.");
+        if (value.length < 6 || value.length > 9) {
+            throw new Error("Username must be between 6 and 9 characters.");
         }
 
         usernameError.textContent = "";
