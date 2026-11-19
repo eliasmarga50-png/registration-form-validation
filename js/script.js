@@ -5,6 +5,7 @@ const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const username = document.getElementById("username");
 const email = document.getElementById("email");
+const phone = document.getElementById("phone");
 const password = document.getElementById("password");
 const confirmPassword = document.getElementById("confirmPassword");
 const profileImage = document.getElementById("profileImage");
@@ -13,6 +14,7 @@ const firstNameError = document.getElementById("firstNameError");
 const lastNameError = document.getElementById("lastNameError");
 const usernameError = document.getElementById("usernameError");
 const emailError = document.getElementById("emailError");
+const phoneError = document.getElementById("phoneError");
 const passwordError = document.getElementById("passwordError");
 const confirmPasswordError = document.getElementById("confirmPasswordError");
 const profileImageError = document.getElementById("profileImageError");
@@ -111,6 +113,30 @@ function validateEmail() {
         return true;
     } catch (error) {
         emailError.textContent = error.message;
+        return false;
+    }
+}
+
+function validatePhone() {
+    try {
+        const value = phone.value;
+
+        if (value === "") {
+            throw new Error("Phone number is required.");
+        }
+
+        if (!/^\d+$/.test(value)) {
+            throw new Error("Phone number must contain digits only.");
+        }
+
+        if (value.length < 7 || value.length > 15) {
+            throw new Error("Phone number must contain 7–15 digits.");
+        }
+
+        phoneError.textContent = "";
+        return true;
+    } catch (error) {
+        phoneError.textContent = error.message;
         return false;
     }
 }
@@ -218,6 +244,12 @@ email.addEventListener("input", () => {
     clearFormMessage();
 });
 
+phone.addEventListener("input", () => {
+    phone.value = phone.value.replace(/\D/g, "").slice(0, 15);
+    validatePhone();
+    clearFormMessage();
+});
+
 password.addEventListener("input", () => {
     validatePassword();
 
@@ -263,6 +295,7 @@ registrationForm.addEventListener("submit", (event) => {
         const isLastNameValid = validateLastName();
         const isUsernameValid = validateUsername();
         const isEmailValid = validateEmail();
+        const isPhoneValid = validatePhone();
         const isPasswordValid = validatePassword();
         const isConfirmPasswordValid = validateConfirmPassword();
         const isProfileImageValid = validateProfileImage();
@@ -272,6 +305,7 @@ registrationForm.addEventListener("submit", (event) => {
             isLastNameValid &&
             isUsernameValid &&
             isEmailValid &&
+            isPhoneValid &&
             isPasswordValid &&
             isConfirmPasswordValid &&
             isProfileImageValid;
